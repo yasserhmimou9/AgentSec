@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.org/schemas/academic-dataset-generator-session.schema.json",
   "title": "Academic Dataset Generator Session Dataset",
-  "description": "Strict schema for an auditable, deterministic dataset generator session log (IEEE/ACM submission oriented).",
+  "description": "Strict schema for an auditable, deterministic dataset generator session log.",
   "type": "object",
   "additionalProperties": false,
   "required": [
