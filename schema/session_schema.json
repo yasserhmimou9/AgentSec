@@ -1,0 +1,735 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/academic-dataset-generator-session.schema.json",
+  "title": "Academic Dataset Generator Session Dataset",
+  "description": "Strict schema for an auditable, deterministic dataset generator session log (IEEE/ACM submission oriented).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_metadata",
+    "interactions",
+    "state_traces",
+    "memory_traces",
+    "decision_traces",
+    "tool_calls",
+    "provenance"
+  ],
+  "properties": {
+    "session_metadata": {
+      "$ref": "#/definitions/session_metadata"
+    },
+    "interactions": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/definitions/interaction_event"
+      }
+    },
+    "state_traces": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/definitions/state_trace_event"
+      }
+    },
+    "memory_traces": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/definitions/memory_trace_event"
+      }
+    },
+    "decision_traces": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/definitions/decision_trace_event"
+      }
+    },
+    "tool_calls": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/definitions/tool_call_event"
+      }
+    },
+    "provenance": {
+      "$ref": "#/definitions/provenance"
+    }
+  },
+  "definitions": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "iso8601_utc": {
+      "type": "string",
+      "description": "UTC timestamp in RFC3339/ISO8601 format (must end with 'Z').",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "turn_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "trace_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_id",
+        "agent_id",
+        "turn_id",
+        "timestamp_utc"
+      ],
+      "properties": {
+        "session_id": {
+          "$ref": "#/definitions/session_id"
+        },
+        "agent_id": {
+          "$ref": "#/definitions/agent_id"
+        },
+        "turn_id": {
+          "$ref": "#/definitions/turn_id"
+        },
+        "timestamp_utc": {
+          "$ref": "#/definitions/iso8601_utc"
+        }
+      }
+    },
+    "session_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_id",
+        "agent_id",
+        "timestamp_utc",
+        "dataset_version",
+        "schema_id",
+        "schema_version",
+        "environment",
+        "determinism",
+        "audit",
+        "started_at_utc",
+        "ended_at_utc",
+        "total_turns",
+        "scenario_id",
+        "scenario_version"
+      ],
+      "properties": {
+        "session_id": {
+          "$ref": "#/definitions/session_id"
+        },
+        "agent_id": {
+          "$ref": "#/definitions/agent_id"
+        },
+        "timestamp_utc": {
+          "$ref": "#/definitions/iso8601_utc"
+        },
+        "dataset_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "os",
+            "shell",
+            "workspace_path"
+          ],
+          "properties": {
+            "os": {
+              "type": "string",
+              "minLength": 1
+            },
+            "shell": {
+              "type": "string",
+              "minLength": 1
+            },
+            "workspace_path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "determinism": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "random_seed",
+            "hash_algorithm",
+            "time_source"
+          ],
+          "properties": {
+            "random_seed": {
+              "type": [
+                "integer",
+                "string"
+              ],
+              "description": "Seed used for any randomness; string allowed if derived or composite."
+            },
+            "hash_algorithm": {
+              "type": "string",
+              "enum": [
+                "SHA256"
+              ]
+            },
+            "time_source": {
+              "type": "string",
+              "description": "Description of how timestamps were produced (e.g., system clock, monotonic clock + offset).",
+              "minLength": 1
+            }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "log_level",
+            "decision_logging",
+            "memory_logging",
+            "tool_logging"
+          ],
+          "properties": {
+            "log_level": {
+              "type": "string",
+              "enum": [
+                "trace",
+                "debug",
+                "info",
+                "warn",
+                "error"
+              ]
+            },
+            "decision_logging": {
+              "type": "boolean"
+            },
+            "memory_logging": {
+              "type": "boolean"
+            },
+            "tool_logging": {
+              "type": "boolean"
+            }
+          }
+        },
+        "started_at_utc": {
+          "$ref": "#/definitions/iso8601_utc"
+        },
+        "ended_at_utc": {
+          "$ref": "#/definitions/iso8601_utc"
+        },
+        "total_turns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scenario_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scenario_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "interaction_event": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/trace_context"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "role",
+            "content"
+          ],
+          "properties": {
+            "event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "user",
+                "assistant",
+                "system",
+                "developer",
+                "tool"
+              ]
+            },
+            "content": {
+              "type": "string"
+            },
+            "content_type": {
+              "type": "string",
+              "enum": [
+                "text/plain",
+                "text/markdown",
+                "application/json"
+              ],
+              "default": "text/plain"
+            },
+            "message_hash_sha256": {
+              "$ref": "#/definitions/sha256"
+            },
+            "parent_event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "attachments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "attachment_id",
+                  "type",
+                  "sha256"
+                ],
+                "properties": {
+                  "attachment_id": {
+                    "$ref": "#/definitions/uuid"
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "$ref": "#/definitions/sha256"
+                  },
+                  "uri": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "state_trace_event": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/trace_context"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "state_before",
+            "state_after",
+            "state_hash_before",
+            "state_hash_after"
+          ],
+          "properties": {
+            "event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "state_before": {
+              "type": "object",
+              "description": "Arbitrary structured snapshot of agent/system state before a transition.",
+              "additionalProperties": true
+            },
+            "state_after": {
+              "type": "object",
+              "description": "Arbitrary structured snapshot of agent/system state after a transition.",
+              "additionalProperties": true
+            },
+            "state_hash_before": {
+              "$ref": "#/definitions/sha256"
+            },
+            "state_hash_after": {
+              "$ref": "#/definitions/sha256"
+            },
+            "transition_name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "memory_trace_event": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/trace_context"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "memory_before",
+            "memory_after",
+            "memory_hash_before",
+            "memory_hash_after"
+          ],
+          "properties": {
+            "event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "memory_before": {
+              "type": [
+                "object",
+                "array",
+                "string",
+                "null"
+              ],
+              "description": "Full memory representation before change (format defined by implementation)."
+            },
+            "memory_after": {
+              "type": [
+                "object",
+                "array",
+                "string",
+                "null"
+              ],
+              "description": "Full memory representation after change (format defined by implementation)."
+            },
+            "memory_hash_before": {
+              "$ref": "#/definitions/sha256"
+            },
+            "memory_hash_after": {
+              "$ref": "#/definitions/sha256"
+            },
+            "memory_scope": {
+              "type": "string",
+              "description": "Scope/namespace of memory being modified (e.g., 'persistent', 'session', 'tool', 'scratchpad').",
+              "minLength": 1
+            },
+            "change_type": {
+              "type": "string",
+              "enum": [
+                "create",
+                "update",
+                "delete",
+                "noop"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "decision_trace_event": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/trace_context"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "intent",
+            "justification",
+            "decision"
+          ],
+          "properties": {
+            "event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "intent": {
+              "type": "string",
+              "minLength": 1,
+              "description": "High-level intent of the decision."
+            },
+            "justification": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Rationale suitable for audit and academic review."
+            },
+            "decision": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "selected_option"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "selected_option": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "options_considered": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "option",
+                      "pros",
+                      "cons"
+                    ],
+                    "properties": {
+                      "option": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "pros": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "cons": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "constraints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "resulting_actions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tool_call_event": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/trace_context"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "tool_name",
+            "parameters",
+            "status"
+          ],
+          "properties": {
+            "event_id": {
+              "$ref": "#/definitions/uuid"
+            },
+            "tool_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "proposed",
+                "approved",
+                "rejected",
+                "started",
+                "succeeded",
+                "failed"
+              ]
+            },
+            "result": {
+              "type": [
+                "object",
+                "array",
+                "string",
+                "null"
+              ],
+              "description": "Tool output/result payload. Use hashes and/or external references for large outputs when needed."
+            },
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "stack": {
+                  "type": "string"
+                }
+              }
+            },
+            "duration_ms": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entities",
+        "links"
+      ],
+      "properties": {
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/provenance_entity"
+          }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Explicit source-to-target links enabling audit trails across the dataset.",
+          "items": {
+            "$ref": "#/definitions/provenance_link"
+          }
+        }
+      }
+    },
+    "provenance_entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity_id",
+        "entity_type",
+        "label"
+      ],
+      "properties": {
+        "entity_id": {
+          "$ref": "#/definitions/uuid"
+        },
+        "entity_type": {
+          "type": "string",
+          "enum": [
+            "interaction_event",
+            "state_trace_event",
+            "memory_trace_event",
+            "decision_trace_event",
+            "tool_call_event",
+            "external_source",
+            "artifact"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/definitions/sha256"
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "provenance_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "link_id",
+        "timestamp_utc",
+        "session_id",
+        "agent_id",
+        "turn_id",
+        "source_entity_id",
+        "target_entity_id",
+        "relationship",
+        "justification"
+      ],
+      "properties": {
+        "link_id": {
+          "$ref": "#/definitions/uuid"
+        },
+        "timestamp_utc": {
+          "$ref": "#/definitions/iso8601_utc"
+        },
+        "session_id": {
+          "$ref": "#/definitions/session_id"
+        },
+        "agent_id": {
+          "$ref": "#/definitions/agent_id"
+        },
+        "turn_id": {
+          "$ref": "#/definitions/turn_id"
+        },
+        "source_entity_id": {
+          "$ref": "#/definitions/uuid"
+        },
+        "target_entity_id": {
+          "$ref": "#/definitions/uuid"
+        },
+        "relationship": {
+          "type": "string",
+          "enum": [
+            "derived_from",
+            "used_by",
+            "generated",
+            "validated_by",
+            "transformed_to",
+            "caused",
+            "triggered"
+          ]
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this link exists; must be explicit for audit."
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "parameters_hash_sha256": {
+              "$ref": "#/definitions/sha256"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

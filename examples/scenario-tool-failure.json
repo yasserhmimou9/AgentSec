@@ -1,0 +1,182 @@
+{
+  "session_metadata": {
+    "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:04:00Z",
+    "total_turns": 4,
+    "scenario_id": "scenario-tool-failure",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "624f1f9d-0a0d-52e4-8767-bdb46994fdb1",
+      "role": "user",
+      "content": "Check whether the dependency list contains known issues.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "d52ec815-ec5c-562e-89c0-1647d96b26d4",
+      "role": "assistant",
+      "content": "I attempted an offline dependency scan, but the scanner database was unavailable. Please provide the DB artifact or allow online mode.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [],
+  "decision_traces": [
+    {
+      "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "e6957fdc-e920-5f55-9d5d-245948bad803",
+      "intent": "dependency_audit",
+      "justification": "A tool-based scan provides an auditable, repeatable check.",
+      "decision": {
+        "name": "audit_strategy",
+        "selected_option": "run_dependency_scanner",
+        "options_considered": [
+          {
+            "option": "manual_review",
+            "pros": [
+              "No tooling"
+            ],
+            "cons": [
+              "Error-prone",
+              "Hard to reproduce"
+            ]
+          },
+          {
+            "option": "run_dependency_scanner",
+            "pros": [
+              "Reproducible",
+              "Auditable"
+            ],
+            "cons": [
+              "Tool may fail"
+            ]
+          }
+        ],
+        "constraints": [
+          "Deterministic logging",
+          "Capture failures"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_dependency_scanner",
+        "report_results"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "5a5522f9-d372-5181-8d21-b7c7a8140908",
+      "tool_name": "dependency_scanner",
+      "parameters": {
+        "input": "requirements.txt",
+        "mode": "offline"
+      },
+      "status": "failed",
+      "error": {
+        "message": "Scanner database not available in offline mode."
+      },
+      "duration_ms": 250
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "624f1f9d-0a0d-52e4-8767-bdb46994fdb1",
+        "entity_type": "interaction_event",
+        "label": "user_dependency_audit_request",
+        "sha256": "928ef5bcf949ff244220169f23fd74a758b3cefddfa823d37560e50ebdfbec10"
+      },
+      {
+        "entity_id": "e6957fdc-e920-5f55-9d5d-245948bad803",
+        "entity_type": "decision_trace_event",
+        "label": "decision_run_scanner",
+        "sha256": "2050dbc4507078a24d677f6321c616663c5bbebf1de24d5778ae60c9c36a6d7d"
+      },
+      {
+        "entity_id": "5a5522f9-d372-5181-8d21-b7c7a8140908",
+        "entity_type": "tool_call_event",
+        "label": "dependency_scanner_call_failed",
+        "sha256": "38665be9b5739457a0564cbcd5fcdcc464a87b2f004778929a06e2c23f436747"
+      },
+      {
+        "entity_id": "d52ec815-ec5c-562e-89c0-1647d96b26d4",
+        "entity_type": "interaction_event",
+        "label": "assistant_reports_failure",
+        "sha256": "f5d05000d04800d8de55169d63df9dcf7b217a12355e205e82e27c39fe63cd79"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "c54d9af5-f4e5-534d-b244-54f9350355f2",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "624f1f9d-0a0d-52e4-8767-bdb46994fdb1",
+        "target_entity_id": "e6957fdc-e920-5f55-9d5d-245948bad803",
+        "relationship": "used_by",
+        "justification": "User request determines audit strategy decision."
+      },
+      {
+        "link_id": "fbda9d46-991a-5908-a177-08706d5c3642",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "e6957fdc-e920-5f55-9d5d-245948bad803",
+        "target_entity_id": "5a5522f9-d372-5181-8d21-b7c7a8140908",
+        "relationship": "triggered",
+        "justification": "Decision triggered the dependency scanner tool call."
+      },
+      {
+        "link_id": "c9fc0adb-1d7c-537c-8af6-0a5f31c0c195",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "de613806-2d10-5484-a83c-f6b6c7bc801a",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "5a5522f9-d372-5181-8d21-b7c7a8140908",
+        "target_entity_id": "d52ec815-ec5c-562e-89c0-1647d96b26d4",
+        "relationship": "caused",
+        "justification": "Tool failure caused the assistant to report inability to complete scan."
+      }
+    ]
+  }
+}

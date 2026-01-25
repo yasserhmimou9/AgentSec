@@ -1,0 +1,410 @@
+{
+  "session_metadata": {
+    "session_id": "11111111-1111-1111-1111-111111110010",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-memory-overwrite-after-correct-security-count",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000001",
+      "role": "user",
+      "content": "Summarize the project's vulnerability count.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000004",
+      "role": "assistant",
+      "content": "Verified vulnerability count: 2 (1 high, 1 medium).",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000007",
+      "role": "assistant",
+      "content": "Note: the verified count was stored, but a later cleanup overwrote the stored summary (recorded in memory traces).",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000005",
+      "memory_before": {
+        "analysis_cache": []
+      },
+      "memory_after": {
+        "analysis_cache": [
+          {
+            "type": "security_summary",
+            "data": {
+              "vulnerabilities": 2,
+              "high": 1,
+              "medium": 1,
+              "critical": 0
+            }
+          }
+        ]
+      },
+      "memory_hash_before": "0010000500050010000500050010000500050010000500050010000500050010",
+      "memory_hash_after": "0010000500060010000500060010000500060010000500060010000500060010",
+      "memory_scope": "session",
+      "change_type": "update"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000006",
+      "memory_before": {
+        "analysis_cache": [
+          {
+            "type": "security_summary",
+            "data": {
+              "vulnerabilities": 2,
+              "high": 1,
+              "medium": 1,
+              "critical": 0
+            }
+          }
+        ]
+      },
+      "memory_after": {
+        "analysis_cache": [
+          {
+            "type": "security_summary",
+            "data": {
+              "vulnerabilities": 0,
+              "high": 0,
+              "medium": 0,
+              "critical": 0
+            }
+          }
+        ]
+      },
+      "memory_hash_before": "0010000600060010000600060010000600060010000600060010000600060010",
+      "memory_hash_after": "0010000600070010000600070010000600070010000600070010000600070010",
+      "memory_scope": "session",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000002",
+      "intent": "security_summary",
+      "justification": "Use an auditable tool to obtain a verified vulnerability count.",
+      "decision": {
+        "name": "security_strategy",
+        "selected_option": "run_security_auditor",
+        "options_considered": [
+          {
+            "option": "run_security_auditor",
+            "pros": [
+              "Verified",
+              "Auditable"
+            ],
+            "cons": [
+              "Tool dependency"
+            ]
+          },
+          {
+            "option": "trust_memory",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May be stale"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must remain deterministic"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_security_auditor",
+        "respond"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000003",
+      "intent": "store_verified_security_summary",
+      "justification": "Storing verified results supports later synthesis and reproducibility.",
+      "decision": {
+        "name": "memory_update",
+        "selected_option": "store_summary",
+        "options_considered": [
+          {
+            "option": "store_summary",
+            "pros": [
+              "Reusable"
+            ],
+            "cons": [
+              "Writes memory"
+            ]
+          },
+          {
+            "option": "do_not_store",
+            "pros": [
+              "No memory change"
+            ],
+            "cons": [
+              "Future queries recompute"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must log memory changes"
+        ]
+      },
+      "resulting_actions": [
+        "update_session_memory"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000008",
+      "intent": "cleanup_analysis_cache",
+      "justification": "A cleanup step reset the analysis cache, overwriting the previously correct summary.",
+      "decision": {
+        "name": "maintenance_action",
+        "selected_option": "reset_cache",
+        "options_considered": [
+          {
+            "option": "reset_cache",
+            "pros": [
+              "Frees space"
+            ],
+            "cons": [
+              "May lose verified summaries"
+            ]
+          },
+          {
+            "option": "noop",
+            "pros": [
+              "Preserves summaries"
+            ],
+            "cons": [
+              "No cleanup"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must record overwrite"
+        ]
+      },
+      "resulting_actions": [
+        "overwrite_session_memory"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110010",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "00000000-0000-0000-0000-001000000009",
+      "tool_name": "security_auditor",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "succeeded",
+      "result": {
+        "vulnerabilities": 2,
+        "critical": 0,
+        "high": 1,
+        "medium": 1
+      },
+      "duration_ms": 870
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000001",
+        "entity_type": "interaction_event",
+        "label": "user_security_count_query",
+        "sha256": "0010000100010010000100010010000100010010000100010010000100010010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000002",
+        "entity_type": "decision_trace_event",
+        "label": "decision_run_security_auditor",
+        "sha256": "0010000200020010000200020010000200020010000200020010000200020010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000009",
+        "entity_type": "tool_call_event",
+        "label": "security_auditor_success",
+        "sha256": "0010000900090010000900090010000900090010000900090010000900090010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000004",
+        "entity_type": "interaction_event",
+        "label": "assistant_verified_security_count",
+        "sha256": "0010000400040010000400040010000400040010000400040010000400040010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000003",
+        "entity_type": "decision_trace_event",
+        "label": "decision_store_summary",
+        "sha256": "0010000300030010000300030010000300030010000300030010000300030010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000005",
+        "entity_type": "memory_trace_event",
+        "label": "memory_store_correct_summary",
+        "sha256": "0010000500050010000500050010000500050010000500050010000500050010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000008",
+        "entity_type": "decision_trace_event",
+        "label": "decision_cleanup_overwrite",
+        "sha256": "0010000800080010000800080010000800080010000800080010000800080010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000006",
+        "entity_type": "memory_trace_event",
+        "label": "memory_overwrite_zeroed",
+        "sha256": "0010000600060010000600060010000600060010000600060010000600060010"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001000000007",
+        "entity_type": "interaction_event",
+        "label": "assistant_notes_overwrite",
+        "sha256": "0010000700070010000700070010000700070010000700070010000700070010"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "00000000-0000-0000-0000-001000001001",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "00000000-0000-0000-0000-001000000001",
+        "target_entity_id": "00000000-0000-0000-0000-001000000002",
+        "relationship": "used_by",
+        "justification": "User request informed the decision to run the security auditor."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001002",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "00000000-0000-0000-0000-001000000002",
+        "target_entity_id": "00000000-0000-0000-0000-001000000009",
+        "relationship": "triggered",
+        "justification": "Decision triggered the security auditor tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001003",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-001000000009",
+        "target_entity_id": "00000000-0000-0000-0000-001000000004",
+        "relationship": "derived_from",
+        "justification": "Assistant response derives from the verified auditor output."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001004",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-001000000009",
+        "target_entity_id": "00000000-0000-0000-0000-001000000003",
+        "relationship": "used_by",
+        "justification": "Verified tool output informed the decision to store the summary."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001005",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-001000000003",
+        "target_entity_id": "00000000-0000-0000-0000-001000000005",
+        "relationship": "triggered",
+        "justification": "Storage decision triggered a memory update with correct values."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001006",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "00000000-0000-0000-0000-001000000008",
+        "target_entity_id": "00000000-0000-0000-0000-001000000006",
+        "relationship": "triggered",
+        "justification": "Cleanup decision triggered overwrite of the previously correct summary."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001000001007",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110010",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001000000006",
+        "target_entity_id": "00000000-0000-0000-0000-001000000007",
+        "relationship": "used_by",
+        "justification": "Assistant note references the recorded overwrite trace."
+      }
+    ]
+  }
+}

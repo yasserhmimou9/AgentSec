@@ -1,0 +1,439 @@
+{
+  "session_metadata": {
+    "session_id": "11111111-1111-1111-1111-111111110015",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:08:00Z",
+    "total_turns": 8,
+    "scenario_id": "scenario-partial-success-recovery-structure-then-auditor",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000001",
+      "role": "user",
+      "content": "Analyze the codebase structure and report vulnerabilities.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 8,
+      "timestamp_utc": "2026-01-20T15:08:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000008",
+      "role": "assistant",
+      "content": "Partial success recovered: structure analysis succeeded (12 modules, 8 dependencies, 2 entry points). Primary security scanner failed, but recovery via security auditor succeeded: 2 vulnerabilities (1 high, 1 medium).",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000007",
+      "memory_before": {
+        "analysis_cache": []
+      },
+      "memory_after": {
+        "analysis_cache": [
+          {
+            "type": "structure",
+            "data": {
+              "modules": 12,
+              "dependencies": 8,
+              "entry_points": 2
+            }
+          },
+          {
+            "type": "security",
+            "data": {
+              "vulnerabilities": 2,
+              "critical": 0,
+              "high": 1,
+              "medium": 1
+            }
+          }
+        ]
+      },
+      "memory_hash_before": "0015000700070015000700070015000700070015000700070015000700070015",
+      "memory_hash_after": "0015000700080015000700080015000700080015000700080015000700080015",
+      "memory_scope": "session",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000002",
+      "intent": "analyze_structure",
+      "justification": "Structure analysis is deterministic and supports an auditable response.",
+      "decision": {
+        "name": "structure_strategy",
+        "selected_option": "run_structure_analyzer",
+        "options_considered": [
+          {
+            "option": "run_structure_analyzer",
+            "pros": [
+              "Objective metrics"
+            ],
+            "cons": [
+              "Tool dependency"
+            ]
+          },
+          {
+            "option": "manual_overview",
+            "pros": [
+              "No tools"
+            ],
+            "cons": [
+              "Subjective"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must be deterministic"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_structure_analyzer"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000003",
+      "intent": "scan_vulnerabilities",
+      "justification": "A fast scanner can provide a vulnerability count; use it first for speed.",
+      "decision": {
+        "name": "security_strategy",
+        "selected_option": "run_security_scanner",
+        "options_considered": [
+          {
+            "option": "run_security_scanner",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May fail"
+            ]
+          },
+          {
+            "option": "run_security_auditor",
+            "pros": [
+              "More robust"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must log failures"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_security_scanner"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000005",
+      "intent": "recover_from_scanner_failure",
+      "justification": "Security scanner failed; recover with the auditor tool to still provide a verified security result.",
+      "decision": {
+        "name": "recovery_strategy",
+        "selected_option": "run_security_auditor",
+        "options_considered": [
+          {
+            "option": "abort_security_part",
+            "pros": [
+              "Avoids more tool calls"
+            ],
+            "cons": [
+              "User request partially unmet"
+            ]
+          },
+          {
+            "option": "run_security_auditor",
+            "pros": [
+              "Recovers a verified result"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must disclose recovery"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_security_auditor",
+        "store_and_respond"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000004",
+      "tool_name": "structure_analyzer",
+      "parameters": {
+        "target": "codebase",
+        "depth": 3
+      },
+      "status": "succeeded",
+      "result": {
+        "modules": 12,
+        "dependencies": 8,
+        "entry_points": 2
+      },
+      "duration_ms": 460
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000006",
+      "tool_name": "security_scanner",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "failed",
+      "error": {
+        "message": "Security scanner unavailable in current environment."
+      },
+      "duration_ms": 420
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110015",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "00000000-0000-0000-0000-001500000009",
+      "tool_name": "security_auditor",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "succeeded",
+      "result": {
+        "vulnerabilities": 2,
+        "critical": 0,
+        "high": 1,
+        "medium": 1
+      },
+      "duration_ms": 900
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000001",
+        "entity_type": "interaction_event",
+        "label": "user_structure_and_security_request",
+        "sha256": "0015000100010015000100010015000100010015000100010015000100010015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000002",
+        "entity_type": "decision_trace_event",
+        "label": "decision_structure",
+        "sha256": "0015000200020015000200020015000200020015000200020015000200020015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000003",
+        "entity_type": "decision_trace_event",
+        "label": "decision_security_scanner_first",
+        "sha256": "0015000300030015000300030015000300030015000300030015000300030015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000004",
+        "entity_type": "tool_call_event",
+        "label": "structure_analyzer_success",
+        "sha256": "0015000400040015000400040015000400040015000400040015000400040015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000006",
+        "entity_type": "tool_call_event",
+        "label": "security_scanner_failed",
+        "sha256": "0015000600060015000600060015000600060015000600060015000600060015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000005",
+        "entity_type": "decision_trace_event",
+        "label": "decision_recover_with_auditor",
+        "sha256": "0015000500050015000500050015000500050015000500050015000500050015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000009",
+        "entity_type": "tool_call_event",
+        "label": "security_auditor_success",
+        "sha256": "0015000900090015000900090015000900090015000900090015000900090015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000007",
+        "entity_type": "memory_trace_event",
+        "label": "memory_store_combined_results",
+        "sha256": "0015000700070015000700070015000700070015000700070015000700070015"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001500000008",
+        "entity_type": "interaction_event",
+        "label": "assistant_combined_response",
+        "sha256": "0015000800080015000800080015000800080015000800080015000800080015"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "00000000-0000-0000-0000-001500001001",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "00000000-0000-0000-0000-001500000001",
+        "target_entity_id": "00000000-0000-0000-0000-001500000002",
+        "relationship": "used_by",
+        "justification": "User request informed structure analysis decision."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001002",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "00000000-0000-0000-0000-001500000001",
+        "target_entity_id": "00000000-0000-0000-0000-001500000003",
+        "relationship": "used_by",
+        "justification": "User request also informed security scanning decision."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001003",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-001500000002",
+        "target_entity_id": "00000000-0000-0000-0000-001500000004",
+        "relationship": "triggered",
+        "justification": "Structure decision triggered structure analyzer tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001004",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-001500000003",
+        "target_entity_id": "00000000-0000-0000-0000-001500000006",
+        "relationship": "triggered",
+        "justification": "Security decision triggered security scanner tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001005",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-001500000006",
+        "target_entity_id": "00000000-0000-0000-0000-001500000005",
+        "relationship": "triggered",
+        "justification": "Scanner failure triggered a recovery decision."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001006",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "00000000-0000-0000-0000-001500000005",
+        "target_entity_id": "00000000-0000-0000-0000-001500000009",
+        "relationship": "triggered",
+        "justification": "Recovery decision triggered the security auditor tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001007",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001500000004",
+        "target_entity_id": "00000000-0000-0000-0000-001500000007",
+        "relationship": "derived_from",
+        "justification": "Stored structure result derives from structure analyzer output."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001008",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001500000009",
+        "target_entity_id": "00000000-0000-0000-0000-001500000007",
+        "relationship": "derived_from",
+        "justification": "Stored security result derives from auditor output."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001009",
+        "timestamp_utc": "2026-01-20T15:08:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 8,
+        "source_entity_id": "00000000-0000-0000-0000-001500000007",
+        "target_entity_id": "00000000-0000-0000-0000-001500000008",
+        "relationship": "used_by",
+        "justification": "Assistant response uses the combined results stored in memory."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001500001010",
+        "timestamp_utc": "2026-01-20T15:08:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110015",
+        "agent_id": "agent-main",
+        "turn_id": 8,
+        "source_entity_id": "00000000-0000-0000-0000-001500000006",
+        "target_entity_id": "00000000-0000-0000-0000-001500000008",
+        "relationship": "used_by",
+        "justification": "Assistant response references scanner failure to explain recovery."
+      }
+    ]
+  }
+}

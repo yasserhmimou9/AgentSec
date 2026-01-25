@@ -1,0 +1,125 @@
+{
+  "session_metadata": {
+    "session_id": "38236681-956f-580f-9ede-9915160e9334",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:03:00Z",
+    "total_turns": 3,
+    "scenario_id": "scenario-memory-noop",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "38236681-956f-580f-9ede-9915160e9334",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "9ca9a967-737e-5a9f-85a2-d4d05fe5a10e",
+      "role": "user",
+      "content": "Confirm whether you stored any new memory this session.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "38236681-956f-580f-9ede-9915160e9334",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "91f306ee-3c8f-59b7-b2bc-8a10659d62e1",
+      "role": "assistant",
+      "content": "No new memory was stored; the memory snapshot is unchanged (verified by matching SHA256).",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "38236681-956f-580f-9ede-9915160e9334",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "66f2c0f3-1d2c-5423-b746-33bfcc9e9fc0",
+      "memory_before": {
+        "notes": [
+          "baseline"
+        ]
+      },
+      "memory_after": {
+        "notes": [
+          "baseline"
+        ]
+      },
+      "memory_hash_before": "26c0f4482d303b3ffc8e216da08d7ab05b07cb27f684b2cf025e6590214a4bb1",
+      "memory_hash_after": "26c0f4482d303b3ffc8e216da08d7ab05b07cb27f684b2cf025e6590214a4bb1",
+      "memory_scope": "session",
+      "change_type": "noop"
+    }
+  ],
+  "decision_traces": [],
+  "tool_calls": [],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "9ca9a967-737e-5a9f-85a2-d4d05fe5a10e",
+        "entity_type": "interaction_event",
+        "label": "user_memory_check_request",
+        "sha256": "652452d75ce3bd98a2fd03ffe24fee642df4cc6b5b81d61126bafb07fd23e41f"
+      },
+      {
+        "entity_id": "66f2c0f3-1d2c-5423-b746-33bfcc9e9fc0",
+        "entity_type": "memory_trace_event",
+        "label": "memory_noop",
+        "sha256": "b10a51459d0bb8d681681c1956e0e0f2c7f34003dc10574fe82196b1966bad50"
+      },
+      {
+        "entity_id": "91f306ee-3c8f-59b7-b2bc-8a10659d62e1",
+        "entity_type": "interaction_event",
+        "label": "assistant_confirms_noop",
+        "sha256": "734e889420aee00bc5ca21a0bd0a60aff4bbf99e20e582848d396833f7811df5"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "78f092f5-e815-5335-9d4d-22af4a1c05b7",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "38236681-956f-580f-9ede-9915160e9334",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "9ca9a967-737e-5a9f-85a2-d4d05fe5a10e",
+        "target_entity_id": "66f2c0f3-1d2c-5423-b746-33bfcc9e9fc0",
+        "relationship": "triggered",
+        "justification": "User request prompted an explicit memory integrity check recorded as a noop trace."
+      },
+      {
+        "link_id": "8e4f4e86-6d3a-5bdc-a3be-dae339ae56b6",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "38236681-956f-580f-9ede-9915160e9334",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "66f2c0f3-1d2c-5423-b746-33bfcc9e9fc0",
+        "target_entity_id": "91f306ee-3c8f-59b7-b2bc-8a10659d62e1",
+        "relationship": "used_by",
+        "justification": "Assistant response is based on the recorded noop memory trace and its hashes."
+      }
+    ]
+  }
+}

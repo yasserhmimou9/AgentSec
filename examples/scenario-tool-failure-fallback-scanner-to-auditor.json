@@ -1,0 +1,284 @@
+{
+  "session_metadata": {
+    "session_id": "11111111-1111-1111-1111-111111110019",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-tool-failure-fallback-scanner-to-auditor",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000001",
+      "role": "user",
+      "content": "Summarize the project's security vulnerabilities.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000007",
+      "role": "assistant",
+      "content": "Primary security scanner failed; fallback security auditor succeeded: 2 vulnerabilities (1 high, 1 medium).",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [],
+  "decision_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000002",
+      "intent": "security_summary",
+      "justification": "Start with the fast scanner for a quick summary; fall back to the auditor if the scanner fails.",
+      "decision": {
+        "name": "security_tool_selection",
+        "selected_option": "security_scanner_primary",
+        "options_considered": [
+          {
+            "option": "security_scanner_primary",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May fail"
+            ]
+          },
+          {
+            "option": "security_auditor_primary",
+            "pros": [
+              "More robust"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must have fallback"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_security_scanner",
+        "fallback_if_failed"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000004",
+      "intent": "fallback_to_auditor",
+      "justification": "Scanner failed; auditor provides a recoverable verified vulnerability count.",
+      "decision": {
+        "name": "fallback_strategy",
+        "selected_option": "run_security_auditor",
+        "options_considered": [
+          {
+            "option": "abort",
+            "pros": [
+              "Avoids additional tool use"
+            ],
+            "cons": [
+              "User request unmet"
+            ]
+          },
+          {
+            "option": "run_security_auditor",
+            "pros": [
+              "Recovers a result"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must disclose fallback"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_security_auditor",
+        "respond"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000003",
+      "tool_name": "security_scanner",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "failed",
+      "error": {
+        "message": "Security scanner unavailable in current environment."
+      },
+      "duration_ms": 410
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110019",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-001900000005",
+      "tool_name": "security_auditor",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "succeeded",
+      "result": {
+        "vulnerabilities": 2,
+        "critical": 0,
+        "high": 1,
+        "medium": 1
+      },
+      "duration_ms": 890
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000001",
+        "entity_type": "interaction_event",
+        "label": "user_security_summary_request",
+        "sha256": "0019000100010019000100010019000100010019000100010019000100010019"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000002",
+        "entity_type": "decision_trace_event",
+        "label": "decision_scanner_primary",
+        "sha256": "0019000200020019000200020019000200020019000200020019000200020019"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000003",
+        "entity_type": "tool_call_event",
+        "label": "security_scanner_failed",
+        "sha256": "0019000300030019000300030019000300030019000300030019000300030019"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000004",
+        "entity_type": "decision_trace_event",
+        "label": "decision_fallback_auditor",
+        "sha256": "0019000400040019000400040019000400040019000400040019000400040019"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000005",
+        "entity_type": "tool_call_event",
+        "label": "security_auditor_success",
+        "sha256": "0019000500050019000500050019000500050019000500050019000500050019"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001900000007",
+        "entity_type": "interaction_event",
+        "label": "assistant_reports_fallback_success",
+        "sha256": "0019000700070019000700070019000700070019000700070019000700070019"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "00000000-0000-0000-0000-001900001001",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "00000000-0000-0000-0000-001900000001",
+        "target_entity_id": "00000000-0000-0000-0000-001900000002",
+        "relationship": "used_by",
+        "justification": "User request informed the decision to try scanner first."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001900001002",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "00000000-0000-0000-0000-001900000002",
+        "target_entity_id": "00000000-0000-0000-0000-001900000003",
+        "relationship": "triggered",
+        "justification": "Primary decision triggered security scanner tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001900001003",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-001900000003",
+        "target_entity_id": "00000000-0000-0000-0000-001900000004",
+        "relationship": "triggered",
+        "justification": "Scanner failure triggered fallback decision."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001900001004",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-001900000004",
+        "target_entity_id": "00000000-0000-0000-0000-001900000005",
+        "relationship": "triggered",
+        "justification": "Fallback decision triggered security auditor tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001900001005",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001900000005",
+        "target_entity_id": "00000000-0000-0000-0000-001900000007",
+        "relationship": "derived_from",
+        "justification": "Assistant response derives from fallback auditor output."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001900001006",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110019",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001900000003",
+        "target_entity_id": "00000000-0000-0000-0000-001900000007",
+        "relationship": "used_by",
+        "justification": "Assistant response references the failed primary scanner to explain fallback."
+      }
+    ]
+  }
+}

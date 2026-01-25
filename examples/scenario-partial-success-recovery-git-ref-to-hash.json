@@ -1,0 +1,272 @@
+{
+  "session_metadata": {
+    "session_id": "11111111-1111-1111-1111-111111110014",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-partial-success-recovery-git-ref-to-hash",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000001",
+      "role": "user",
+      "content": "Fetch the latest commit hash from the repository.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000007",
+      "role": "assistant",
+      "content": "Recovered commit hash via two-step file reads. Commit hash: 0123456789abcdef0123456789abcdef01234567.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [],
+  "decision_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000002",
+      "intent": "read_git_head_reference",
+      "justification": "Reading .git/HEAD is a deterministic, file-based approach when git tooling may be unavailable.",
+      "decision": {
+        "name": "commit_strategy",
+        "selected_option": "read_head_file",
+        "options_considered": [
+          {
+            "option": "git_rev_parse",
+            "pros": [
+              "Direct hash"
+            ],
+            "cons": [
+              "May fail if git unavailable"
+            ]
+          },
+          {
+            "option": "read_head_file",
+            "pros": [
+              "Works offline",
+              "Deterministic"
+            ],
+            "cons": [
+              "May return only a ref"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must be deterministic"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_file_reader_head"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000004",
+      "intent": "recover_hash_from_ref",
+      "justification": "The first tool call succeeded but returned a ref. A second deterministic file read can resolve the ref to a commit hash.",
+      "decision": {
+        "name": "ref_resolution",
+        "selected_option": "read_ref_file",
+        "options_considered": [
+          {
+            "option": "read_ref_file",
+            "pros": [
+              "Produces hash deterministically"
+            ],
+            "cons": [
+              "Requires second tool call"
+            ]
+          },
+          {
+            "option": "stop_at_ref",
+            "pros": [
+              "No more tool calls"
+            ],
+            "cons": [
+              "Does not satisfy user request"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must recover a hash if possible"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_file_reader_ref",
+        "respond_with_hash"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000003",
+      "tool_name": "file_reader",
+      "parameters": {
+        "path": ".git/HEAD",
+        "fallback": true
+      },
+      "status": "succeeded",
+      "result": {
+        "content": "ref: refs/heads/main",
+        "source": "file"
+      },
+      "duration_ms": 45
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110014",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-001400000005",
+      "tool_name": "file_reader",
+      "parameters": {
+        "path": ".git/refs/heads/main",
+        "fallback": true
+      },
+      "status": "succeeded",
+      "result": {
+        "content": "0123456789abcdef0123456789abcdef01234567",
+        "source": "file"
+      },
+      "duration_ms": 50
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000001",
+        "entity_type": "interaction_event",
+        "label": "user_commit_hash_request",
+        "sha256": "0014000100010014000100010014000100010014000100010014000100010014"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000002",
+        "entity_type": "decision_trace_event",
+        "label": "decision_read_head",
+        "sha256": "0014000200020014000200020014000200020014000200020014000200020014"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000003",
+        "entity_type": "tool_call_event",
+        "label": "file_reader_head_success_ref",
+        "sha256": "0014000300030014000300030014000300030014000300030014000300030014"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000004",
+        "entity_type": "decision_trace_event",
+        "label": "decision_resolve_ref",
+        "sha256": "0014000400040014000400040014000400040014000400040014000400040014"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000005",
+        "entity_type": "tool_call_event",
+        "label": "file_reader_ref_success_hash",
+        "sha256": "0014000500050014000500050014000500050014000500050014000500050014"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-001400000007",
+        "entity_type": "interaction_event",
+        "label": "assistant_hash_response",
+        "sha256": "0014000700070014000700070014000700070014000700070014000700070014"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "00000000-0000-0000-0000-001400001001",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110014",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "00000000-0000-0000-0000-001400000001",
+        "target_entity_id": "00000000-0000-0000-0000-001400000002",
+        "relationship": "used_by",
+        "justification": "User request informed the decision to begin with reading .git/HEAD."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001400001002",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110014",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "00000000-0000-0000-0000-001400000002",
+        "target_entity_id": "00000000-0000-0000-0000-001400000003",
+        "relationship": "triggered",
+        "justification": "Decision triggered the first file reader tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001400001003",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110014",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-001400000003",
+        "target_entity_id": "00000000-0000-0000-0000-001400000004",
+        "relationship": "triggered",
+        "justification": "Partial success (ref only) triggered a recovery decision to resolve the ref."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001400001004",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110014",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-001400000004",
+        "target_entity_id": "00000000-0000-0000-0000-001400000005",
+        "relationship": "triggered",
+        "justification": "Recovery decision triggered the second file reader tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-001400001005",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110014",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-001400000005",
+        "target_entity_id": "00000000-0000-0000-0000-001400000007",
+        "relationship": "derived_from",
+        "justification": "Assistant response derives from the resolved commit hash read."
+      }
+    ]
+  }
+}

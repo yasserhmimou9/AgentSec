@@ -1,0 +1,318 @@
+{
+  "session_metadata": {
+    "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:06:00Z",
+    "total_turns": 6,
+    "scenario_id": "scenario-multi-tool-success",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "a3295a68-1351-5417-a77b-c28d8f542709",
+      "role": "user",
+      "content": "Analyze the codebase structure and check for security vulnerabilities.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:06:00Z",
+      "event_id": "d2561296-6477-51b3-8126-d483a04909f5",
+      "role": "assistant",
+      "content": "Codebase analysis: 12 modules, 8 dependencies, 2 entry points. Security scan: 3 issues (1 high, 2 medium). Details stored in analysis cache.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "0b7762f2-b499-53ba-b141-75b7a357d69f",
+      "memory_before": {
+        "analysis_cache": []
+      },
+      "memory_after": {
+        "analysis_cache": [
+          {
+            "type": "structure",
+            "data": {
+              "modules": 12,
+              "dependencies": 8,
+              "entry_points": 2
+            }
+          },
+          {
+            "type": "security",
+            "data": {
+              "issues": 3,
+              "critical": 0,
+              "high": 1,
+              "medium": 2
+            }
+          }
+        ]
+      },
+      "memory_hash_before": "378457d00b4af61c246b46cb6e30f1cfd3248045d09fb2bb2a9b3883af7ebadf",
+      "memory_hash_after": "7360c9dfc51b75efce35f2318dc9f9919e51c51b2c40cb89a7fb54a94dc05dd8",
+      "memory_scope": "session",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "26d61541-fcd9-5472-b760-5ec59558402a",
+      "intent": "comprehensive_analysis",
+      "justification": "User requested both structural analysis and security audit; two tools are needed for complete coverage.",
+      "decision": {
+        "name": "analysis_strategy",
+        "selected_option": "sequential_tool_chain",
+        "options_considered": [
+          {
+            "option": "single_tool",
+            "pros": [
+              "Faster"
+            ],
+            "cons": [
+              "Limited coverage",
+              "Less specialized"
+            ]
+          },
+          {
+            "option": "sequential_tool_chain",
+            "pros": [
+              "Comprehensive",
+              "Specialized tools"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          },
+          {
+            "option": "parallel_tools",
+            "pros": [
+              "Fastest"
+            ],
+            "cons": [
+              "Complex coordination",
+              "Resource intensive"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must maintain audit trail",
+          "Tools must be deterministic"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_structure_analyzer",
+        "tool_call_security_scanner",
+        "synthesize_results"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "006fb008-3456-5e0f-a430-8f8ee38f4e44",
+      "tool_name": "structure_analyzer",
+      "parameters": {
+        "target": "codebase",
+        "depth": 3
+      },
+      "status": "succeeded",
+      "result": {
+        "modules": 12,
+        "dependencies": 8,
+        "entry_points": 2
+      },
+      "duration_ms": 450
+    },
+    {
+      "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "16eefb6a-312e-5484-91fb-60b813243a34",
+      "tool_name": "security_scanner",
+      "parameters": {
+        "target": "codebase",
+        "severity": "all"
+      },
+      "status": "succeeded",
+      "result": {
+        "issues": 3,
+        "critical": 0,
+        "high": 1,
+        "medium": 2
+      },
+      "duration_ms": 680
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "a3295a68-1351-5417-a77b-c28d8f542709",
+        "entity_type": "interaction_event",
+        "label": "user_analysis_request",
+        "sha256": "700516a2369a7a9d61b71d126506dec0ea9cdcf96597dfb3eb8b433eedc2e47f"
+      },
+      {
+        "entity_id": "26d61541-fcd9-5472-b760-5ec59558402a",
+        "entity_type": "decision_trace_event",
+        "label": "decision_sequential_chain",
+        "sha256": "a9a9d2259d0e51e78dea16735998773848211c60b44d45fb44c1dbad6bc70f24"
+      },
+      {
+        "entity_id": "006fb008-3456-5e0f-a430-8f8ee38f4e44",
+        "entity_type": "tool_call_event",
+        "label": "structure_analyzer_success",
+        "sha256": "20baac8597cbb67610fb9093df1cdd2c4caf7d7561cec5f1161541f931caa2c4"
+      },
+      {
+        "entity_id": "16eefb6a-312e-5484-91fb-60b813243a34",
+        "entity_type": "tool_call_event",
+        "label": "security_scanner_success",
+        "sha256": "77a4e6f527cfa66e53ce6936ba7b4ba0df8dac2a03eb1ada83d904ed712a7f8d"
+      },
+      {
+        "entity_id": "0b7762f2-b499-53ba-b141-75b7a357d69f",
+        "entity_type": "memory_trace_event",
+        "label": "memory_store_analysis",
+        "sha256": "f218dd45c165072bcded07c85dafa8a4d2379fc3e98f3a3d1c530f4856e5d42c"
+      },
+      {
+        "entity_id": "d2561296-6477-51b3-8126-d483a04909f5",
+        "entity_type": "interaction_event",
+        "label": "assistant_synthesis",
+        "sha256": "eb514c3bc6d0914946d4c3682d6a5f2aa272c24553e2ef6e4287ef91001d3621"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "bf69753d-8d0d-5911-b024-fe9c09defdf0",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "a3295a68-1351-5417-a77b-c28d8f542709",
+        "target_entity_id": "26d61541-fcd9-5472-b760-5ec59558402a",
+        "relationship": "used_by",
+        "justification": "User request informed the decision to use sequential tool chain."
+      },
+      {
+        "link_id": "063d33e3-51e8-525a-aecc-ecf835f5507a",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "26d61541-fcd9-5472-b760-5ec59558402a",
+        "target_entity_id": "006fb008-3456-5e0f-a430-8f8ee38f4e44",
+        "relationship": "triggered",
+        "justification": "Decision triggered the first tool call (structure analyzer)."
+      },
+      {
+        "link_id": "4624a0d5-e797-5ab8-8bd6-d98f95fc6633",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "26d61541-fcd9-5472-b760-5ec59558402a",
+        "target_entity_id": "16eefb6a-312e-5484-91fb-60b813243a34",
+        "relationship": "triggered",
+        "justification": "Decision also triggered the second tool call (security scanner)."
+      },
+      {
+        "link_id": "8835b326-3349-5da2-9c30-911900b81915",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "006fb008-3456-5e0f-a430-8f8ee38f4e44",
+        "target_entity_id": "0b7762f2-b499-53ba-b141-75b7a357d69f",
+        "relationship": "derived_from",
+        "justification": "Memory update derived from structure analyzer output."
+      },
+      {
+        "link_id": "86155837-d15d-57b8-a0b6-1fbe6cfd986e",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "16eefb6a-312e-5484-91fb-60b813243a34",
+        "target_entity_id": "0b7762f2-b499-53ba-b141-75b7a357d69f",
+        "relationship": "derived_from",
+        "justification": "Memory update also derived from security scanner output."
+      },
+      {
+        "link_id": "960d1a95-fc81-5768-ac83-ca624a372613",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "0b7762f2-b499-53ba-b141-75b7a357d69f",
+        "target_entity_id": "d2561296-6477-51b3-8126-d483a04909f5",
+        "relationship": "used_by",
+        "justification": "Final response uses the synthesized memory containing both tool results."
+      },
+      {
+        "link_id": "29cd8cfa-2eab-5d2d-ad35-41bc14c9ecdf",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "006fb008-3456-5e0f-a430-8f8ee38f4e44",
+        "target_entity_id": "d2561296-6477-51b3-8126-d483a04909f5",
+        "relationship": "derived_from",
+        "justification": "Response content derives from structure analyzer results."
+      },
+      {
+        "link_id": "b26e4055-23e5-5892-8efa-660aeec1cfb4",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "5793554c-b545-5a72-9f3b-0c41421007dc",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "16eefb6a-312e-5484-91fb-60b813243a34",
+        "target_entity_id": "d2561296-6477-51b3-8126-d483a04909f5",
+        "relationship": "derived_from",
+        "justification": "Response content also derives from security scanner results."
+      }
+    ]
+  }
+}

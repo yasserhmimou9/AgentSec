@@ -1,0 +1,294 @@
+{
+  "session_metadata": {
+    "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-hallucination-detected",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "d1863e1b-bb2a-5373-8cdb-47436fa96907",
+      "role": "user",
+      "content": "How many test files are in the project?",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "5e3a72ba-8f07-5389-88fc-d0ceb5a20209",
+      "role": "assistant",
+      "content": "Based on typical project structure, I estimate there are approximately 5-10 test files.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:06:00Z",
+      "event_id": "fc82e660-291e-5c1b-ab14-a32fe0323e0f",
+      "role": "assistant",
+      "content": "Correction: I previously estimated 5-10 test files, but verification shows there are actually 23 test files in the project. I apologize for the earlier unverified estimate.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [],
+  "decision_traces": [
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "2ed44081-9992-576e-9df4-eec446944964",
+      "intent": "estimate_test_count",
+      "justification": "Based on typical project structure, estimating test file count without verification.",
+      "decision": {
+        "name": "response_strategy",
+        "selected_option": "estimate_without_verification",
+        "options_considered": [
+          {
+            "option": "estimate_without_verification",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May be incorrect",
+              "Not auditable"
+            ]
+          },
+          {
+            "option": "verify_with_tool",
+            "pros": [
+              "Accurate",
+              "Auditable"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must be deterministic if verified"
+        ]
+      },
+      "resulting_actions": [
+        "provide_estimate"
+      ]
+    },
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "f5904ad4-857a-5f1b-81d9-b31477eda11e",
+      "intent": "verify_previous_response",
+      "justification": "Initial estimate was unverified and may be incorrect. Verifying with tool to correct if needed.",
+      "decision": {
+        "name": "correction_strategy",
+        "selected_option": "verify_and_correct",
+        "options_considered": [
+          {
+            "option": "ignore_error",
+            "pros": [
+              "No change"
+            ],
+            "cons": [
+              "Incorrect information",
+              "Loss of trust"
+            ]
+          },
+          {
+            "option": "verify_and_correct",
+            "pros": [
+              "Accurate",
+              "Maintains trust"
+            ],
+            "cons": [
+              "Requires correction"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must correct errors",
+          "Must maintain auditability"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_file_counter",
+        "correct_if_needed"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "3730e48e-0de6-5914-805c-8dae3a59e2cf",
+      "tool_name": "file_counter",
+      "parameters": {
+        "pattern": "**/test_*.py",
+        "recursive": true
+      },
+      "status": "succeeded",
+      "result": {
+        "count": 23,
+        "files": [
+          "test_unit.py",
+          "test_integration.py",
+          "test_api.py"
+        ]
+      },
+      "duration_ms": 210
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "d1863e1b-bb2a-5373-8cdb-47436fa96907",
+        "entity_type": "interaction_event",
+        "label": "user_test_count_query",
+        "sha256": "a9a17d0f5eecc2ae07893e8a895868cff32da45a86e63fd7e1265e72740936f1"
+      },
+      {
+        "entity_id": "2ed44081-9992-576e-9df4-eec446944964",
+        "entity_type": "decision_trace_event",
+        "label": "decision_initial_estimate",
+        "sha256": "2d4deed7afc3c093f2c2bafeadfecd2c7610460b915dffb967b1928007a5f2aa"
+      },
+      {
+        "entity_id": "5e3a72ba-8f07-5389-88fc-d0ceb5a20209",
+        "entity_type": "interaction_event",
+        "label": "assistant_incorrect_estimate",
+        "sha256": "59ee34a033c3b4411081f3185e1a3940af79f29255d1c69e2b93433f12d0df9a"
+      },
+      {
+        "entity_id": "f5904ad4-857a-5f1b-81d9-b31477eda11e",
+        "entity_type": "decision_trace_event",
+        "label": "decision_correction",
+        "sha256": "8ac691a6dd35e101c8664190ec52d1c31c5bfbca5d185a62e432807c9fa4971c"
+      },
+      {
+        "entity_id": "3730e48e-0de6-5914-805c-8dae3a59e2cf",
+        "entity_type": "tool_call_event",
+        "label": "file_counter_verification",
+        "sha256": "3c157f80b6a26b1e6fc78721b03a496cccf16c7b906bbaa04435ff67254b5c33"
+      },
+      {
+        "entity_id": "fc82e660-291e-5c1b-ab14-a32fe0323e0f",
+        "entity_type": "interaction_event",
+        "label": "assistant_corrected_response",
+        "sha256": "bae5e77799ba244971ae67c397e231f4270f21d16c95579677fe47babef6b2bc"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "2e3756cd-9eb2-5afd-943e-79ba82476d6b",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "d1863e1b-bb2a-5373-8cdb-47436fa96907",
+        "target_entity_id": "2ed44081-9992-576e-9df4-eec446944964",
+        "relationship": "used_by",
+        "justification": "User query informed initial (incorrect) estimation decision."
+      },
+      {
+        "link_id": "cfd47111-fe9a-5593-8b9b-7be00ddbef28",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "2ed44081-9992-576e-9df4-eec446944964",
+        "target_entity_id": "5e3a72ba-8f07-5389-88fc-d0ceb5a20209",
+        "relationship": "caused",
+        "justification": "Initial decision caused the incorrect estimate response."
+      },
+      {
+        "link_id": "4461ef63-a7d3-504d-b2d3-74707b8b6e77",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "5e3a72ba-8f07-5389-88fc-d0ceb5a20209",
+        "target_entity_id": "f5904ad4-857a-5f1b-81d9-b31477eda11e",
+        "relationship": "triggered",
+        "justification": "Realization that initial response was unverified triggered correction decision."
+      },
+      {
+        "link_id": "6f21064a-3298-5a2a-bd25-0254e4bc7c63",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "f5904ad4-857a-5f1b-81d9-b31477eda11e",
+        "target_entity_id": "3730e48e-0de6-5914-805c-8dae3a59e2cf",
+        "relationship": "triggered",
+        "justification": "Correction decision triggered verification tool call."
+      },
+      {
+        "link_id": "21cd4f9e-60fb-5483-af7a-b7c2d2f6131e",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "3730e48e-0de6-5914-805c-8dae3a59e2cf",
+        "target_entity_id": "fc82e660-291e-5c1b-ab14-a32fe0323e0f",
+        "relationship": "derived_from",
+        "justification": "Corrected response derives from verified tool output."
+      },
+      {
+        "link_id": "dcfed80b-75d5-53ce-ab7e-51c8737b661c",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "f5904ad4-857a-5f1b-81d9-b31477eda11e",
+        "target_entity_id": "fc82e660-291e-5c1b-ab14-a32fe0323e0f",
+        "relationship": "caused",
+        "justification": "Correction decision caused the corrected response."
+      },
+      {
+        "link_id": "bab9961d-9d70-57c6-a052-9a0cf80ee89d",
+        "timestamp_utc": "2026-01-20T15:06:00Z",
+        "session_id": "b85ef6aa-aa2f-565a-9338-a0eb98c0ea11",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "5e3a72ba-8f07-5389-88fc-d0ceb5a20209",
+        "target_entity_id": "fc82e660-291e-5c1b-ab14-a32fe0323e0f",
+        "relationship": "caused",
+        "justification": "Initial incorrect response caused the corrected response that explicitly replaces it."
+      }
+    ]
+  }
+}

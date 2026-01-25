@@ -1,0 +1,277 @@
+{
+  "session_metadata": {
+    "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:05:00Z",
+    "total_turns": 5,
+    "scenario_id": "scenario-success-tool-success",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "7088c13a-2ba3-56cd-bea2-cb74aa7dcdfc",
+      "role": "user",
+      "content": "Please summarize today's agent activity succinctly.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "52cca5d5-6b96-5ae5-bf5b-bc1bcc46c5e9",
+      "role": "assistant",
+      "content": "Understood. I will review the trace, gather tool outputs, and produce a concise summary.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "0a100855-fa2f-59ac-be86-8c431c0b8ded",
+      "role": "assistant",
+      "content": "Summary: The agent reviewed session traces, validated memory integrity, executed a structured tool call to fetch state, and produced this audit-ready summary.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "5c415fc8-9882-521d-a284-739cb70df9c0",
+      "state_before": {
+        "plan": "pending",
+        "tool_ready": false
+      },
+      "state_after": {
+        "plan": "summarize_session",
+        "tool_ready": true
+      },
+      "state_hash_before": "ad6036e0a104981ab9d9328e42bad9837c80cdfb9b403a673358a386efaea404",
+      "state_hash_after": "c5180a0e62535e5e695e29fc98c2fb18f6ec32da6e625397bbd5a5db51671800",
+      "transition_name": "plan_selection"
+    }
+  ],
+  "memory_traces": [
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "7ea27d68-2df3-561d-9c44-df3b1618f015",
+      "memory_before": {
+        "notes": []
+      },
+      "memory_after": {
+        "notes": [
+          "Planned summary",
+          "Validated memory integrity",
+          "Fetched state snapshot"
+        ]
+      },
+      "memory_hash_before": "bfce066ba420e00d28312534e1ce05216738af779961c3f303f42a05113ba5b1",
+      "memory_hash_after": "a275d1a7c398b38b2f954784fd556c10a4df331920246c5bf8c64e7ae75f4e7a",
+      "memory_scope": "session",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "d3570f47-844a-5e1b-85cd-7154bcb588b9",
+      "intent": "summarize_session",
+      "justification": "User requested a summary; selecting summarization plan with tool support for auditability.",
+      "decision": {
+        "name": "response_strategy",
+        "selected_option": "summarize_with_state_fetch",
+        "options_considered": [
+          {
+            "option": "respond_directly",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "Unverified state",
+              "Lower audit fidelity"
+            ]
+          },
+          {
+            "option": "summarize_with_state_fetch",
+            "pros": [
+              "Verified context",
+              "Better audit trail"
+            ],
+            "cons": [
+              "Slightly slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must remain deterministic",
+          "Must log provenance"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_state_fetch",
+        "produce_summary"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "40b8cb7f-557d-5b9e-8a9c-2b71aa18cd5d",
+      "tool_name": "state_inspector",
+      "parameters": {
+        "target": "session_state",
+        "include_memory": true
+      },
+      "status": "succeeded",
+      "result": {
+        "state": {
+          "plan": "summarize_session",
+          "tool_ready": true
+        },
+        "memory": {
+          "notes": [
+            "Planned summary",
+            "Validated memory integrity",
+            "Fetched state snapshot"
+          ]
+        }
+      },
+      "duration_ms": 120
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "7088c13a-2ba3-56cd-bea2-cb74aa7dcdfc",
+        "entity_type": "interaction_event",
+        "label": "user_request",
+        "sha256": "75676b722cde54e70efdd06d8a5baf1fe6069b5a09775027430b37a973e01902"
+      },
+      {
+        "entity_id": "d3570f47-844a-5e1b-85cd-7154bcb588b9",
+        "entity_type": "decision_trace_event",
+        "label": "decision_response_strategy",
+        "sha256": "e4a8fc860dcf91aa4e36632287f292566fde785aa8a576fd68a922da70f76d25"
+      },
+      {
+        "entity_id": "40b8cb7f-557d-5b9e-8a9c-2b71aa18cd5d",
+        "entity_type": "tool_call_event",
+        "label": "state_inspector_call",
+        "sha256": "062d9e15529d2ffcf3e27eb5e8bc37cb0c2487f06b3a5b8885b5b1cc86c73d9a"
+      },
+      {
+        "entity_id": "7ea27d68-2df3-561d-9c44-df3b1618f015",
+        "entity_type": "memory_trace_event",
+        "label": "memory_update_session",
+        "sha256": "3d3f5a160ef9caae5088b3541ea4d67114f243779a0db4dbe0a36ab96946c352"
+      },
+      {
+        "entity_id": "5c415fc8-9882-521d-a284-739cb70df9c0",
+        "entity_type": "state_trace_event",
+        "label": "state_plan_selection",
+        "sha256": "69c7f1f5ec79f04ce4827b9b39434d91f20f999a20c8ff9d42bd8b84e1a68bf5"
+      },
+      {
+        "entity_id": "0a100855-fa2f-59ac-be86-8c431c0b8ded",
+        "entity_type": "interaction_event",
+        "label": "assistant_summary",
+        "sha256": "91a6e9e8a5dbfe8a2a609b847a0bf9b305ff392a20d9eda78d00c9880c893ab2"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "e92ea095-8a48-5882-ab94-8f717ca4f6bb",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "7088c13a-2ba3-56cd-bea2-cb74aa7dcdfc",
+        "target_entity_id": "d3570f47-844a-5e1b-85cd-7154bcb588b9",
+        "relationship": "used_by",
+        "justification": "User request informs the decision strategy."
+      },
+      {
+        "link_id": "43450205-7a4c-51a1-b7d8-5c57ee7a8048",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "d3570f47-844a-5e1b-85cd-7154bcb588b9",
+        "target_entity_id": "40b8cb7f-557d-5b9e-8a9c-2b71aa18cd5d",
+        "relationship": "triggered",
+        "justification": "Decision initiated a state inspection tool call."
+      },
+      {
+        "link_id": "685db660-da4b-5a5c-b2b3-d36492d1dffd",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "40b8cb7f-557d-5b9e-8a9c-2b71aa18cd5d",
+        "target_entity_id": "7ea27d68-2df3-561d-9c44-df3b1618f015",
+        "relationship": "generated",
+        "justification": "Tool call output populated memory snapshot."
+      },
+      {
+        "link_id": "46a5de84-0595-58c7-b663-afb312027b64",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "7ea27d68-2df3-561d-9c44-df3b1618f015",
+        "target_entity_id": "0a100855-fa2f-59ac-be86-8c431c0b8ded",
+        "relationship": "used_by",
+        "justification": "Memory update was referenced in final summary."
+      },
+      {
+        "link_id": "86644ec0-96ae-5fc4-aba5-bbb39d55a4b4",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "7fba1036-c2e9-5ffe-8b8b-9c12a79e24a6",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "40b8cb7f-557d-5b9e-8a9c-2b71aa18cd5d",
+        "target_entity_id": "0a100855-fa2f-59ac-be86-8c431c0b8ded",
+        "relationship": "derived_from",
+        "justification": "Summary content derives from inspected state."
+      }
+    ]
+  }
+}

@@ -1,0 +1,381 @@
+{
+  "session_metadata": {
+    "session_id": "11111111-1111-1111-1111-111111110009",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-memory-overwrite-after-correct-version",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000001",
+      "role": "user",
+      "content": "What is the current project version? Please verify.",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000004",
+      "role": "assistant",
+      "content": "Verified project version: 2.0.0 (source: package.json).",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000007",
+      "role": "assistant",
+      "content": "Note: the verified version was stored, but a later maintenance step overwrote the stored value with a stale cache entry; this overwrite is recorded in the memory trace.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000005",
+      "memory_before": {
+        "project_version": "unknown",
+        "last_updated": "2025-01-01"
+      },
+      "memory_after": {
+        "project_version": "2.0.0",
+        "last_updated": "2026-01-20"
+      },
+      "memory_hash_before": "0009000500050009000500050009000500050009000500050009000500050009",
+      "memory_hash_after": "0009000500060009000500060009000500060009000500060009000500060009",
+      "memory_scope": "persistent",
+      "change_type": "update"
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000006",
+      "memory_before": {
+        "project_version": "2.0.0",
+        "last_updated": "2026-01-20"
+      },
+      "memory_after": {
+        "project_version": "1.0.0",
+        "last_updated": "2025-01-01"
+      },
+      "memory_hash_before": "0009000600060009000600060009000600060009000600060009000600060009",
+      "memory_hash_after": "0009000600070009000600070009000600070009000600070009000600070009",
+      "memory_scope": "persistent",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000002",
+      "intent": "verify_version",
+      "justification": "User requested verification; using a deterministic tool produces an auditable answer.",
+      "decision": {
+        "name": "version_verification",
+        "selected_option": "tool_verify",
+        "options_considered": [
+          {
+            "option": "trust_memory",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May be stale"
+            ]
+          },
+          {
+            "option": "tool_verify",
+            "pros": [
+              "Verified",
+              "Auditable"
+            ],
+            "cons": [
+              "Requires tool execution"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must be deterministic"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_version_checker",
+        "respond"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000003",
+      "intent": "store_verified_version",
+      "justification": "Persisting the verified version supports future queries and auditability.",
+      "decision": {
+        "name": "memory_update",
+        "selected_option": "write_verified_version",
+        "options_considered": [
+          {
+            "option": "write_verified_version",
+            "pros": [
+              "Keeps memory current"
+            ],
+            "cons": [
+              "Requires write"
+            ]
+          },
+          {
+            "option": "do_not_write",
+            "pros": [
+              "No persistent change"
+            ],
+            "cons": [
+              "Future queries may be slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must log memory changes"
+        ]
+      },
+      "resulting_actions": [
+        "update_persistent_memory"
+      ]
+    },
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000008",
+      "intent": "maintenance_cache_restore",
+      "justification": "A maintenance step applied a stale cache snapshot, overwriting the previously correct stored value.",
+      "decision": {
+        "name": "maintenance_action",
+        "selected_option": "apply_cache_snapshot",
+        "options_considered": [
+          {
+            "option": "apply_cache_snapshot",
+            "pros": [
+              "Restores baseline"
+            ],
+            "cons": [
+              "May overwrite newer facts"
+            ]
+          },
+          {
+            "option": "noop",
+            "pros": [
+              "Avoids unintended overwrite"
+            ],
+            "cons": [
+              "Does not restore baseline"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must record overwrite"
+        ]
+      },
+      "resulting_actions": [
+        "overwrite_persistent_memory"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "11111111-1111-1111-1111-111111110009",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "00000000-0000-0000-0000-000900000009",
+      "tool_name": "version_checker",
+      "parameters": {
+        "source": "package.json"
+      },
+      "status": "succeeded",
+      "result": {
+        "version": "2.0.0",
+        "source": "package.json"
+      },
+      "duration_ms": 95
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000001",
+        "entity_type": "interaction_event",
+        "label": "user_version_query",
+        "sha256": "0009000100010009000100010009000100010009000100010009000100010009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000002",
+        "entity_type": "decision_trace_event",
+        "label": "decision_verify_version",
+        "sha256": "0009000200020009000200020009000200020009000200020009000200020009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000009",
+        "entity_type": "tool_call_event",
+        "label": "version_checker_success",
+        "sha256": "0009000900090009000900090009000900090009000900090009000900090009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000004",
+        "entity_type": "interaction_event",
+        "label": "assistant_verified_version",
+        "sha256": "0009000400040009000400040009000400040009000400040009000400040009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000003",
+        "entity_type": "decision_trace_event",
+        "label": "decision_store_verified",
+        "sha256": "0009000300030009000300030009000300030009000300030009000300030009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000005",
+        "entity_type": "memory_trace_event",
+        "label": "memory_store_correct",
+        "sha256": "0009000500050009000500050009000500050009000500050009000500050009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000008",
+        "entity_type": "decision_trace_event",
+        "label": "decision_maintenance_overwrite",
+        "sha256": "0009000800080009000800080009000800080009000800080009000800080009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000006",
+        "entity_type": "memory_trace_event",
+        "label": "memory_overwrite_stale",
+        "sha256": "0009000600060009000600060009000600060009000600060009000600060009"
+      },
+      {
+        "entity_id": "00000000-0000-0000-0000-000900000007",
+        "entity_type": "interaction_event",
+        "label": "assistant_notes_overwrite",
+        "sha256": "0009000700070009000700070009000700070009000700070009000700070009"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "00000000-0000-0000-0000-000900001001",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "00000000-0000-0000-0000-000900000001",
+        "target_entity_id": "00000000-0000-0000-0000-000900000002",
+        "relationship": "used_by",
+        "justification": "User query informed the decision to verify the version."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001002",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "00000000-0000-0000-0000-000900000002",
+        "target_entity_id": "00000000-0000-0000-0000-000900000009",
+        "relationship": "triggered",
+        "justification": "Verification decision triggered the version checker tool call."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001003",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "00000000-0000-0000-0000-000900000009",
+        "target_entity_id": "00000000-0000-0000-0000-000900000004",
+        "relationship": "derived_from",
+        "justification": "Assistant response derives from the verified tool output."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001004",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-000900000009",
+        "target_entity_id": "00000000-0000-0000-0000-000900000003",
+        "relationship": "used_by",
+        "justification": "Verified tool output informed the decision to store the value in persistent memory."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001005",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "00000000-0000-0000-0000-000900000003",
+        "target_entity_id": "00000000-0000-0000-0000-000900000005",
+        "relationship": "triggered",
+        "justification": "Storage decision triggered a memory update to the verified value."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001006",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "00000000-0000-0000-0000-000900000008",
+        "target_entity_id": "00000000-0000-0000-0000-000900000006",
+        "relationship": "triggered",
+        "justification": "Maintenance decision triggered the overwrite of previously correct memory."
+      },
+      {
+        "link_id": "00000000-0000-0000-0000-000900001007",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "11111111-1111-1111-1111-111111110009",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "00000000-0000-0000-0000-000900000006",
+        "target_entity_id": "00000000-0000-0000-0000-000900000007",
+        "relationship": "used_by",
+        "justification": "Assistant note references the recorded overwrite trace."
+      }
+    ]
+  }
+}

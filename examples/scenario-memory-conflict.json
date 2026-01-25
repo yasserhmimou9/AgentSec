@@ -1,0 +1,348 @@
+{
+  "session_metadata": {
+    "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+    "agent_id": "agent-main",
+    "timestamp_utc": "2026-01-20T15:00:00Z",
+    "dataset_version": "1.0.0",
+    "schema_id": "academic-dataset-generator-session",
+    "schema_version": "1.1",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "shell": "PowerShell",
+      "workspace_path": "C:/Users/yasse/Downloads/AgentSec"
+    },
+    "determinism": {
+      "random_seed": 1234,
+      "hash_algorithm": "SHA256",
+      "time_source": "fixed-base-timestamp+offset (deterministic)"
+    },
+    "audit": {
+      "log_level": "info",
+      "decision_logging": true,
+      "memory_logging": true,
+      "tool_logging": true
+    },
+    "started_at_utc": "2026-01-20T15:00:00Z",
+    "ended_at_utc": "2026-01-20T15:07:00Z",
+    "total_turns": 7,
+    "scenario_id": "scenario-memory-conflict",
+    "scenario_version": "1.0"
+  },
+  "interactions": [
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 1,
+      "timestamp_utc": "2026-01-20T15:00:00Z",
+      "event_id": "583aff83-bf47-5608-bf14-8be889b52020",
+      "role": "user",
+      "content": "What is the current project version?",
+      "content_type": "text/plain"
+    },
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 7,
+      "timestamp_utc": "2026-01-20T15:07:00Z",
+      "event_id": "56100f7b-d352-5831-b9e4-c0addc947dec",
+      "role": "assistant",
+      "content": "Current project version is 2.0.0 (verified from package.json). I detected a conflict with stored memory (1.0.0) and updated it to reflect the current state.",
+      "content_type": "text/plain"
+    }
+  ],
+  "state_traces": [],
+  "memory_traces": [
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 2,
+      "timestamp_utc": "2026-01-20T15:01:00Z",
+      "event_id": "eed5b613-63d1-56bf-ac8c-eae58427aa47",
+      "memory_before": {
+        "project_version": "1.0.0",
+        "last_updated": "2025-01-01"
+      },
+      "memory_after": {
+        "project_version": "1.0.0",
+        "last_updated": "2025-01-01"
+      },
+      "memory_hash_before": "f495e2b22e1c23f83d98822903a0b190fec8eb0de7ae2e82f898e990eb277990",
+      "memory_hash_after": "f495e2b22e1c23f83d98822903a0b190fec8eb0de7ae2e82f898e990eb277990",
+      "memory_scope": "persistent",
+      "change_type": "noop"
+    },
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 6,
+      "timestamp_utc": "2026-01-20T15:05:00Z",
+      "event_id": "c7174006-9f89-5323-a88c-0ce07c201e7c",
+      "memory_before": {
+        "project_version": "1.0.0",
+        "last_updated": "2025-01-01"
+      },
+      "memory_after": {
+        "project_version": "2.0.0",
+        "last_updated": "2026-01-20"
+      },
+      "memory_hash_before": "f495e2b22e1c23f83d98822903a0b190fec8eb0de7ae2e82f898e990eb277990",
+      "memory_hash_after": "d9a83727ae26de869b0631497545e9d502388063d9a5c1e99494c567dea79a2e",
+      "memory_scope": "persistent",
+      "change_type": "update"
+    }
+  ],
+  "decision_traces": [
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 3,
+      "timestamp_utc": "2026-01-20T15:02:00Z",
+      "event_id": "ec965adc-6c57-5893-839a-ac6b29d7d455",
+      "intent": "verify_version",
+      "justification": "Memory contains version, but tool verification ensures accuracy and detects conflicts.",
+      "decision": {
+        "name": "version_verification",
+        "selected_option": "tool_verify",
+        "options_considered": [
+          {
+            "option": "trust_memory",
+            "pros": [
+              "Fast"
+            ],
+            "cons": [
+              "May be stale",
+              "No conflict detection"
+            ]
+          },
+          {
+            "option": "tool_verify",
+            "pros": [
+              "Current",
+              "Detects conflicts"
+            ],
+            "cons": [
+              "Slower"
+            ]
+          }
+        ],
+        "constraints": [
+          "Must resolve conflicts explicitly",
+          "Must update memory if stale"
+        ]
+      },
+      "resulting_actions": [
+        "tool_call_version_checker",
+        "resolve_conflict_if_needed"
+      ]
+    },
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 5,
+      "timestamp_utc": "2026-01-20T15:04:00Z",
+      "event_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+      "intent": "resolve_version_conflict",
+      "justification": "Memory says 1.0.0, tool says 2.0.0. Tool output is authoritative; updating memory.",
+      "decision": {
+        "name": "conflict_resolution",
+        "selected_option": "trust_tool_authoritative",
+        "options_considered": [
+          {
+            "option": "trust_memory",
+            "pros": [
+              "No change"
+            ],
+            "cons": [
+              "Stale data",
+              "Incorrect"
+            ]
+          },
+          {
+            "option": "trust_tool_authoritative",
+            "pros": [
+              "Current",
+              "Correct"
+            ],
+            "cons": [
+              "Memory update needed"
+            ]
+          }
+        ],
+        "constraints": [
+          "Tool output is authoritative",
+          "Memory must reflect reality"
+        ]
+      },
+      "resulting_actions": [
+        "update_memory",
+        "report_conflict_resolution"
+      ]
+    }
+  ],
+  "tool_calls": [
+    {
+      "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+      "agent_id": "agent-main",
+      "turn_id": 4,
+      "timestamp_utc": "2026-01-20T15:03:00Z",
+      "event_id": "eb631e72-9ed6-5eb4-b834-d0c6bfe3abe9",
+      "tool_name": "version_checker",
+      "parameters": {
+        "source": "package.json"
+      },
+      "status": "succeeded",
+      "result": {
+        "version": "2.0.0",
+        "source": "package.json"
+      },
+      "duration_ms": 95
+    }
+  ],
+  "provenance": {
+    "entities": [
+      {
+        "entity_id": "583aff83-bf47-5608-bf14-8be889b52020",
+        "entity_type": "interaction_event",
+        "label": "user_version_query",
+        "sha256": "b1bbe2dfdcf6f46572ad32ec37bb6846bbab8909dce66f7b3ba666412a628f17"
+      },
+      {
+        "entity_id": "eed5b613-63d1-56bf-ac8c-eae58427aa47",
+        "entity_type": "memory_trace_event",
+        "label": "memory_before_conflict",
+        "sha256": "8832afb737a54da808ccfc3605a29e03b9f6e9070eb5625c27db3f7d262ff555"
+      },
+      {
+        "entity_id": "ec965adc-6c57-5893-839a-ac6b29d7d455",
+        "entity_type": "decision_trace_event",
+        "label": "decision_verify_version",
+        "sha256": "9c1b41043c444fe3ab27837d94146070e556fbb5bdf92b539d4f970180c9ed94"
+      },
+      {
+        "entity_id": "eb631e72-9ed6-5eb4-b834-d0c6bfe3abe9",
+        "entity_type": "tool_call_event",
+        "label": "version_checker_success",
+        "sha256": "a512ad50cae52a109d24af8b8aff22e12d39e305c3e9ac8d15e8b2a0228ea2ac"
+      },
+      {
+        "entity_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+        "entity_type": "decision_trace_event",
+        "label": "decision_resolve_conflict",
+        "sha256": "be5b0cd73958d557f7c1219116a12fd5e6fd0a07aab67d0cf3f9337e91c94ae8"
+      },
+      {
+        "entity_id": "c7174006-9f89-5323-a88c-0ce07c201e7c",
+        "entity_type": "memory_trace_event",
+        "label": "memory_after_resolution",
+        "sha256": "3bc666e86b51fef434376738d061f9bb8a203aa92d1bd8ef0512e1a956f891de"
+      },
+      {
+        "entity_id": "56100f7b-d352-5831-b9e4-c0addc947dec",
+        "entity_type": "interaction_event",
+        "label": "assistant_conflict_resolved",
+        "sha256": "a1f3d78cf1872e87c942bd148af9132ad04c2f38365db3127520841c285db108"
+      }
+    ],
+    "links": [
+      {
+        "link_id": "b4424c6a-dad8-5d56-aac6-cac61222cef2",
+        "timestamp_utc": "2026-01-20T15:01:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 2,
+        "source_entity_id": "583aff83-bf47-5608-bf14-8be889b52020",
+        "target_entity_id": "eed5b613-63d1-56bf-ac8c-eae58427aa47",
+        "relationship": "triggered",
+        "justification": "User query triggered memory inspection revealing stored version."
+      },
+      {
+        "link_id": "8b95f2e3-dcc2-5a28-99e3-74f25627f518",
+        "timestamp_utc": "2026-01-20T15:02:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 3,
+        "source_entity_id": "eed5b613-63d1-56bf-ac8c-eae58427aa47",
+        "target_entity_id": "ec965adc-6c57-5893-839a-ac6b29d7d455",
+        "relationship": "used_by",
+        "justification": "Memory content informed decision to verify with tool."
+      },
+      {
+        "link_id": "e35ebfd1-6ae3-505f-812c-46343e5bba18",
+        "timestamp_utc": "2026-01-20T15:03:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 4,
+        "source_entity_id": "ec965adc-6c57-5893-839a-ac6b29d7d455",
+        "target_entity_id": "eb631e72-9ed6-5eb4-b834-d0c6bfe3abe9",
+        "relationship": "triggered",
+        "justification": "Decision triggered version checker tool call."
+      },
+      {
+        "link_id": "19f764a2-664f-5117-a277-6420069fbc11",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "eb631e72-9ed6-5eb4-b834-d0c6bfe3abe9",
+        "target_entity_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+        "relationship": "triggered",
+        "justification": "Tool output (2.0.0) conflicting with memory (1.0.0) triggered conflict resolution decision."
+      },
+      {
+        "link_id": "657e94ec-a1f5-5977-b6dc-c2cf6d98a6ab",
+        "timestamp_utc": "2026-01-20T15:04:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 5,
+        "source_entity_id": "eed5b613-63d1-56bf-ac8c-eae58427aa47",
+        "target_entity_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+        "relationship": "used_by",
+        "justification": "Stale memory state was used to identify the conflict requiring resolution."
+      },
+      {
+        "link_id": "131c3451-66f9-536b-9a5a-aa0e018795fc",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+        "target_entity_id": "c7174006-9f89-5323-a88c-0ce07c201e7c",
+        "relationship": "triggered",
+        "justification": "Resolution decision triggered memory update to authoritative tool value."
+      },
+      {
+        "link_id": "36e77310-edc5-576d-8a67-8bbba9e33c2d",
+        "timestamp_utc": "2026-01-20T15:05:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 6,
+        "source_entity_id": "eb631e72-9ed6-5eb4-b834-d0c6bfe3abe9",
+        "target_entity_id": "c7174006-9f89-5323-a88c-0ce07c201e7c",
+        "relationship": "derived_from",
+        "justification": "Updated memory derives from authoritative tool output."
+      },
+      {
+        "link_id": "a82672cd-b3d1-54c4-8c1e-7ca194c10fd7",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "c7174006-9f89-5323-a88c-0ce07c201e7c",
+        "target_entity_id": "56100f7b-d352-5831-b9e4-c0addc947dec",
+        "relationship": "used_by",
+        "justification": "Resolved memory state used in final response."
+      },
+      {
+        "link_id": "fc592982-31a2-5ca7-a138-f81c52a085e7",
+        "timestamp_utc": "2026-01-20T15:07:00Z",
+        "session_id": "82074c20-a86e-57a3-8acc-0d2b669a8810",
+        "agent_id": "agent-main",
+        "turn_id": 7,
+        "source_entity_id": "8087776a-3d59-5197-b6b9-06a343cf4507",
+        "target_entity_id": "56100f7b-d352-5831-b9e4-c0addc947dec",
+        "relationship": "caused",
+        "justification": "Conflict resolution decision caused the explanatory response."
+      }
+    ]
+  }
+}
