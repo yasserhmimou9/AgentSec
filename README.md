@@ -1,6 +1,6 @@
 ## Deterministic Dataset Generator (Schema 1.1)
 
-This generator produces JSON session files that **conform to** the frozen schema in `schema/session_schema.json` (schema_version = 1.1). The pipeline is deterministic, auditable, and oriented toward IEEE/ACM reproducibility.
+This generator produces JSON session files that **conform to** the frozen schema in `schema/session_schema.json` (schema_version = 1.1). The pipeline is deterministic, auditable, and oriented toward reproducibility.
 
 ### Determinism and auditability
 - **Random seed**: Explicitly supplied; defaults to `1234`. Stored in `session_metadata.determinism.random_seed`. Same seed ⇒ identical dataset.
@@ -8,7 +8,7 @@ This generator produces JSON session files that **conform to** the frozen schema
 - **Timestamps**: Derived from a fixed base UTC time plus fixed offsets per event (no wall-clock dependence).
 - **Hashes**: SHA256 over canonical JSON (sorted keys, compact separators) for all memory/state/provenance SHA256 fields.
 
-### Validation contract (Option C)
+### Validation contract
 Validation is defined **operationally** using AJV with a deterministic preprocessing step:
 - **Validator**: `ajv@8.x`
 - **Options**: `strict: false`, `allErrors: true`
